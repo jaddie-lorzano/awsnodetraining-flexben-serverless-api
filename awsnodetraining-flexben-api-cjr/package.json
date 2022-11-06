@@ -1,0 +1,26 @@
+{
+  "name": "awsnodetraining-flexben-api-cjr",
+  "version": "1.0.0",
+  "description": "FlexBen API for AWS and NodeJS training by Cris, Jaddie and Rodel",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "flexben",
+    "employee",
+    "reimbursement",
+    "service",
+    "credit"
+  ],
+  "author": "Jaddie Lorzano",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "serverless-http": "^3.1.0",
+    "ulid": "^2.3.0"
+  }
+}
