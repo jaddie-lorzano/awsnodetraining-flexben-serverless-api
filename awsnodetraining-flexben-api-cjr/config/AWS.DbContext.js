@@ -1,131 +1,50 @@
-import AWS from 'aws-sdk';
-AWS.config.update({region: 'ap-southeast-1'});
+import { DynamoDB } from "@aws-sdk/client-dynamodb"; // ES6 import
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb"; // ES6 import
 
+// Set the AWS Region.
+const REGION = 'ap-southeast-1'
 // Create DynamoDB document client
-const dbClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dbClient = new DynamoDB({ region: REGION });
+// client is DynamoDB client
+const ddbDocClient = DynamoDBDocument.from(dbClient);
 
 class DBContext {
     constructor() {
-        this.db = dbClient;
+        this.db = ddbDocClient;
     }
-    async scan (params) {
-        return new Promise((resolve, reject) => {
-            this.db.scan(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(data.Items)
-                }
-            })
-        })
+    scan = async (params) => {
+        return this.db.scan(params)
+            .then((data) => { return data })
+            .catch((err) => { throw new Error(err)});;
     }
-    async query (params) {
-        return new Promise((resolve, reject) => {
-            this.db.query(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(data.Items)
-                }
-            })
-        })
+    query = async (params) => {
+        return this.db.query(params)
+            .then((data) => { return data })
+            .catch((err) => { throw new Error(err)});;
     }
-    async update (params) {
-        return new Promise((resolve, reject) => {
-            this.db.update(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(data)
-                }
-            })
-        })
+    update = async (params) => {
+        return this.db.update(params)
+            .then((data) => { return data })
+            .catch((err) => { throw new Error(err)});;
     }
-    async remove (params) {
-        return new Promise((resolve, reject) => {
-            this.db.delete(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(data)
-                }
-            })
-        })
+    remove = async (params) => {
+        return this.db.delete(params)
+            .then((data) => { return data })
+            .catch((err) => { throw new Error(err)});;
     }
-    async create (params) {
-        return new Promise((resolve, reject) => {
-            this.db.put(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(data)
-                }
-            })
-        })
+    create = async (params) => {
+        return this.db.put(params)
+            .then((data) => { data.params = params; return data })
+            .catch((err) => { throw new Error(err) });
     }
-    async get (params) {
-        return new Promise((resolve, reject) => {
-            this.db.get(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(data)
-                }
-            })
-        })
+    get = async (params) => {
+        return this.db.get(params)
+            .then((data) => { return data })
+            .catch((err) => { throw new Error(err)});;
     }
 }
 
-// const db = {
-//     scan : async (params) => {
-//         try {
-//             const data = await dbClient.scan(params).promise();
-//             return data['Items'];
-//         }
-//         catch (err) {
-//             return err;
-//         }
-//     },
-//     query : async (params) => {
-//         try {
-//             const data = await dbClient.query(params).promise();
-//             return data['Items'];
-//         }
-//         catch (err) {
-//             return err;
-//         }
-//     },
-//     create : async (params) => {
-//         try {
-//             await dbClient.put(params, function(data) {
-//                 return data;
-//             });
-//         }
-//         catch (err) {
-//             return err;
-//         }
-//     },
-//     update : async (params) => {
-//         try {
-//             await dbClient.update(params, function (data) {
-//             return data;
-//             });
-//         }
-//         catch (err) {
-//             return err;
-//         }
-//     },
-//     remove : async (params) => {
-//         try {
-//           const data = await dbClient.delete(params).promise();
-//           return data;
-//         }
-//         catch (err) {
-//           return err;
-//         }
-//     }
-// }
-
-// export default db
+ddbDocClient.destroy(); // no-op
+dbClient.destroy(); // destroys DynamoDBClient
 
 export default DBContext
