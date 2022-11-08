@@ -1,37 +1,47 @@
-import express, { json } from "express";
-// import AppRoute from "./routes/index.js";
-// import { logErrors, clientErrorHandler, errorHandler } from './helpers/error.helper.js';
+import express from "express";
 import serverless from "serverless-http";
+import { faker } from '@faker-js/faker';
+import { ulid } from "ulid";
+import EmployeeRepository from "./repositories/employee.repository.js";
 
 const app = express();
-app.use(json());
+app.use(express.json()); // always put Content-Type:application/json in API Gateway when testing
 
-app.use((req, res, next) => {
-    res.send("Create Employee")
+app.post('/api/v1/hr/employee/create', async (req, res) => {
+
+    // to be deleted
+    class Employee {
+        constructor() {
+            this.employeeId = ulid();
+            this.firstName = faker.name.firstName();
+            this.lastName = faker.name.lastName();
+            this.email = faker.internet.email(this.firstName.toLowerCase(), this.lastName.toLowerCase(), 'pointwest.com.ph')
+            this.password = faker.internet.password(12);
+            this.details = () => {
+                return {
+                    employeeId: this.employeeId,
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    email: this.email,
+                    password: this.password
+                }
+            }
+        }
+
+    }
+
+    let employee = new Employee();
+    const employeeRepo = new EmployeeRepository({ tableName: 'flexben-cris-jad-rodel'})
+    const data = await employeeRepo.createEmployee(employee.details())
+        .then((data) => { return data })
+        .catch((err) => { return err });
+    return res.status(201).json({
+        status: 201,
+        statusText: 'Created',
+        message: 'Employee created',
+        data: {
+            employee: data.params
+        } 
+    })
 })
-
-// // app.use('/api/v1/', authenticateToken , AppRoute);
-// app.use('/api/v1/' , AppRoute);
-
-// // Configure exception logger
-// app.use(logErrors);
-// // Configure client error handler
-// app.use(clientErrorHandler);
-// // Configure catch-all exception middleware last
-// app.use(errorHandler);
-
-export const api = serverless(res.send("Hello"));
-
-// export const api = async (event) => {
-//   return {
-//     statusCode: 200,
-//     body: JSON.stringify(
-//       {
-//         message: 'Go Serverless v3.0! Your function executed successfully!',
-//         input: event,
-//       },
-//       null,
-//       2
-//     ),
-//   };
-// }
+export const api = serverless(app);
