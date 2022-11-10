@@ -1,10 +1,8 @@
 import DBContext from '../config/AWS.DbContext.js';
 const db = new DBContext();
 export default class EmployeeRepository {
-    constructor({
-        tableName
-    }) {
-        this.tableName = tableName ?? "flexben-cris-jad-rodel";
+    constructor() {
+        this.tableName = "flexben-cris-jad-rodel";
     }
     createEmployee = async (
         employee = {

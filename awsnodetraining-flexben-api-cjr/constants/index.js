@@ -1,7 +1,9 @@
 const FLEX_BEN = {
     TAX: 0,
 }
+const REIMBURSEMENT_CUT_OFF_AMOUNT = 500
 
 export {
-    FLEX_BEN
+    FLEX_BEN,
+    REIMBURSEMENT_CUT_OFF_AMOUNT
 }

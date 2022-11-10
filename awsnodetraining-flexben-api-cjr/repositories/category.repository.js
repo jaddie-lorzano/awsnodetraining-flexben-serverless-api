@@ -1,10 +1,29 @@
 import DBContext from '../config/AWS.DbContext.js';
 const db = new DBContext();
-export default class CutOffRepository {
+export default class CategoryRepository {
     constructor() {
         this.tableName = "flexben-cris-jad-rodel";
     }
-    getCutOff = async () => {
+    create = async ({
+        id,
+        code,
+        name,
+        description,
+        dateAdded,
+        addedBy,
+        updatedDate,
+        updatedBy
+    }) => {
+        console.log(`Repo Category: ${JSON.stringify({category: {
+            id,
+            code,
+            name,
+            description,
+            dateAdded,
+            addedBy,
+            updatedDate,
+            updatedBy
+        }})}`)
         let item = {
             PK: `CATEGORY#${id}`,
             SK: 'CATEGORY',

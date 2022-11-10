@@ -2,6 +2,7 @@ import express from "express";
 import serverless from "serverless-http";
 import { faker } from '@faker-js/faker';
 import { ulid } from "ulid";
+import AppRoute from "./routes/index.js";
 import EmployeeRepository from "./repositories/employee.repository.js";
 
 const app = express();
@@ -17,13 +18,17 @@ app.post('/api/v1/hr/employee/create', async (req, res) => {
             this.lastName = faker.name.lastName();
             this.email = faker.internet.email(this.firstName.toLowerCase(), this.lastName.toLowerCase(), 'pointwest.com.ph')
             this.password = faker.internet.password(12);
+            this.role = 'Employee';
+            this.company = 'Pointwest Innovations Corporation';
             this.details = () => {
                 return {
                     employeeId: this.employeeId,
                     firstName: this.firstName,
                     lastName: this.lastName,
                     email: this.email,
-                    password: this.password
+                    password: this.password,
+                    role: this.role,
+                    company: this.company
                 }
             }
         }
@@ -44,4 +49,8 @@ app.post('/api/v1/hr/employee/create', async (req, res) => {
         } 
     })
 })
+
+
+// app.use('/api/v1' , AppRoute);
+
 export const api = serverless(app);
