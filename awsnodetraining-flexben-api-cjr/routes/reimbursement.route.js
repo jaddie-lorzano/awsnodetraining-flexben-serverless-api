@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { ReimbursementController, UserController } from "../controllers/index.js"
+import { ReimbursementController } from "../controllers/index.js"
 
 const ReimbursementRoute = Router();
 
@@ -49,11 +49,11 @@ ReimbursementRoute.use('/reimbursements/:reimbursementId(\\d+)/', (req, res, nex
     res.send(JSON.stringify(req.params))
 })
 
-ReimbursementRoute.use('/info',UserController.retrieveReimbursementDetails)
-// * GET /info
-// US0001: The application should be able to retrieve the user information
+// ReimbursementRoute.use('/info',UserController.retrieveReimbursementDetails)
+// // * GET /info
+// // US0001: The application should be able to retrieve the user information
     
-ReimbursementRoute.use('/', UserController.retrieveReimbursementDetails)
+// ReimbursementRoute.use('/', UserController.retrieveReimbursementDetails)
 
 export default ReimbursementRoute
     
